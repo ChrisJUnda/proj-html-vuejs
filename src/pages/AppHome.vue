@@ -1,9 +1,14 @@
 <script>
 import AppCard from '../components/AppCard.vue';
+import AppNewsLetter from '../components/AppNewsLetter.vue';
+import AppTestimonial from '../components/AppTestimonial.vue';
+
+
 export default{
     name: 'AppHome',
     data() {
       return {
+        //shop
         shop: [
           {
             type: 'Transport',
@@ -25,6 +30,7 @@ export default{
            numbers: '(1)',
            image: 'src/img/product-9.jpg',
            }],
+           //food
            foods: [
              {
               h3: 'Kibble',
@@ -45,11 +51,89 @@ export default{
               button: 'shop frozen food'
              }
            ],
+           //items
+           items: [
+            {
+              image: 'src/img/product-23.jpg',
+              h5:'Chewable Weight',
+              price: '11.00',
+              sale: null
+            },
+            {
+              image: 'src/img/product-22.jpg',
+              h5:'Chewable toy',
+              price: '25.00',
+              sale: 52
+            },
+            {
+              image: 'src/img/product-21.jpg',
+              h5:'transport cage',
+              price: '25.00',
+              sale: null
+            },
+            {
+              image: 'src/img/product-20.jpg',
+              h5:'Dog Leash',
+              price: '25.00',
+              sale: null
+            },
+           ],
+           products: [
+            {
+              image: 'src/img/product-21.jpg',
+              h5:'Transport cage',
+              price: '25.00',
+              sale: null
+            },
+            {
+              image: 'src/img/product-20.jpg',
+              h5:'Dog Leash',
+              price: '25.00',
+              sale: null
+            },
+            {
+              image: 'src/img/product-16.jpg',
+              h5:'Animal transport cage',
+              price: '35.00',
+              sale: 29
+            },
+            {
+              image: 'src/img/product-11.jpg',
+              h5:'colorful cat leash',
+              price: '25.00',
+              sale: null
+            },
+            {
+              image: 'src/img/product-5.jpg',
+              h5:'Animal transport cage',
+              price: '25.00',
+              sale: null
+            },
+            {
+              image: 'src/img/product-4.jpg',
+              h5:'Animal transport bag',
+              price: '25.00',
+              sale: null
+            },
+           ]
       }},
     components: {
       AppCard,
-    }
-}
+      AppTestimonial,
+      AppNewsLetter,
+    },
+    methods: {
+        applySales(total, percentage) {
+        if (percentage) {
+
+          let discountValue = (total / 100) * percentage;
+        let finalPrice = total - discountValue;
+      
+      return finalPrice.toFixed(2);
+      }
+      }
+    
+}}
 </script>
 <template>
   <section id="jumbotron">
@@ -64,9 +148,11 @@ export default{
                 We know animals are a part of your famlily, let us help take care of them
                 
                 </h2>
-                <button>
-                    Learn more about us
-                </button>
+                <router-link to="/about">
+                  <button>
+                      Learn more about us
+                  </button>
+                </router-link>
               </div>
               </div>
             </div>  
@@ -117,7 +203,9 @@ export default{
        <div>
         <h4>Find the best animal supplies</h4>
         <h2>New arrivals weekly</h2>
-        <button>Learn more about us</button>
+        <router-link to="/about">
+          <button>Learn more about us</button>
+        </router-link>
        </div>
      </div>
     </section>
@@ -131,25 +219,22 @@ export default{
       </div>
       
       <div class="contenitore-shop">
-        <div class="col">
-            <img src="../img/product-23.jpg">
-            <h5>Chewable Weight</h5>
+        <div class="col" v-for="item in items">
+            <img :src=item.image>
+            <h5>{{ item.h5 }}</h5>
+            <p class="price" :class="{'line-tr': item.sale}">&#65284;{{ item.price }} <span class="sconto" v-if="item.sale">{{ item.sale }}% off</span>
+            <span class="new-price" v-if="item.sale">&#65284;{{applySales(item.price, item.sale)}}</span></p>
+            
+            <div class="sale" v-if="item.sale">Sale!</div>  <!--  :class="{'none': item.onSale === false}" -->
+             
          </div>
-         <div class="col">
-            <img src="../img/product-22.jpg">
-            <h5>Chewable toy</h5>
-         </div>
-         <div class="col">
-            <img src="../img/product-21.jpg">
-            <h5>Transport cage</h5>
-         </div>
-         <div class="col">
-            <img src="../img/product-20.jpg">
-            <h5>Dog leash</h5>
-         </div>
+         
       </div>
     </section>
+  <AppTestimonial :limit="3" class="mt-5"></AppTestimonial>
+  <AppNewsLetter></AppNewsLetter>
   <AppCard></AppCard>
+  
   <section id="find">
     <div class="container-max">
       <div class="left">
@@ -188,10 +273,34 @@ export default{
            </div>
         </div>
   </section>
+
+  <section id="products">
+  <div class="contenitore">
+        <div>
+          <h3 class="main-color">New Products arrival</h3>
+          <h5 class="light-green">latest products</h5>
+        </div>
+      </div>
+      
+      <div class="contenitore-shop">
+        <div class="col-products" v-for="product in products">
+            <img :src=product.image>
+            <h5>{{ product.h5 }}</h5>
+            <p class="price" :class="{'line-tr': product.sale}">&#65284;{{ product.price }} <span class="sconto" v-if="product.sale">{{ product.sale }}% off</span>
+            <span class="new-price" v-if="product.sale">&#65284;{{applySales(product.price, product.sale)}}</span></p>
+            
+            <div class="sale" v-if="product.sale">Sale!</div>  <!--  :class="{'none': item.onSale === false}" -->
+             
+         </div>
+         
+      </div>
+
+  </section>
   
 </template>
 
 <style scoped lang="scss">
+@import '../assets/scss/partials/_variables.scss';
   #jumbotron .container-fluid {
     max-width: 100%;
     background-image: url(../img/banner-5@2x-scaled.jpg);
@@ -238,7 +347,7 @@ export default{
     margin-bottom: 250px;
   }
   #jumbotron button:hover {
-    background-color: #3d6f42;
+    background-color: $button-bg-hover;
     color: white;
   }
 
@@ -331,7 +440,7 @@ export default{
 
           }
           p {
-            color: #3d6f42;
+            color: $color-green;
             margin-top: 10px;
             font-size: 16px;
             font-weight: 600;
@@ -342,7 +451,7 @@ export default{
           }
           button {
             color: white;
-            background-color: #3d6f42;
+            background-color: $button-h4-icon-color;
             font-weight: 600;
             margin-top: 25px;
           }
@@ -371,7 +480,7 @@ export default{
               color: black;
               }}}
             .img-container button:hover{
-                  background-color: #3d6f42;
+                  background-color: $button-h4-icon-color;
                   color: white;
                 }
   #best-sellers .contenitore {
@@ -383,7 +492,7 @@ export default{
     div {
       margin-bottom: 40px;
       h5 {
-        color: #3d6f42;
+        color: $color-green;
         font-weight: 400;
         font-size: 17px;
         letter-spacing: 0.30mm;
@@ -408,10 +517,19 @@ export default{
          .col {
              margin: 20px;
              width: calc(100% / 4 - 40px);
+             position: relative;
              img {
                  width: 100%;
              }
          }
+        .col-products {
+          width: calc(100% / 3 - 40px);
+          margin: 20px;
+          position: relative;
+          img {
+            width: 100%;
+          }
+        } 
         h5 {
          margin-top: 15px;
          font-weight: 500;
@@ -452,6 +570,7 @@ export default{
       .right:hover, .left:hover{
         transform: scale(1.03);
         transition: 0.2s;
+        cursor: pointer;
       }
       .bot {
         background-image: url(../img/bg-transparent-3.png);
@@ -475,6 +594,58 @@ export default{
         font-size: 43px;
         margin-bottom: 20px;
       }
+  }
+  .price, .new-price {
+    text-align: center;
+    color: $color-green;
+    position: relative;
+  }
+  .sale {
+    border-radius: 50%;
+    position: absolute;
+    left: 10px;
+    top: 20px;
+    padding: 12px 7px;
+
+  } .sconto, .sale {
+    color: white;
+    background-color: #3d6f42;
+  }
+  .sconto {
+    border-radius: 5px;
+    padding: 1px 8px;
+    letter-spacing: 0.55mm;
+    font-weight: 600;
+    font-size: 12px;
+    vertical-align: text-top;
+    text-decoration: none;
+    position: absolute;
+    right: 5%;
+    top: 1px;
+  }
+  .line-tr {
+    text-decoration: line-through;
+    color: black;
+    
+  } .new-price {
+    position: absolute;
+    left: 15%;
+    top: 1px;
+  }
+  #products {
+    text-align: center;
+    margin-top: 100px;
+    margin-bottom: 40px;
+    h5 {
+      
+      margin-top: 20px;
+      font-weight: 400;
+      letter-spacing: 0.25mm;
+    } 
+    
+  }
+  .light-green {
+    color: $color-green;
   }
   
 </style>
