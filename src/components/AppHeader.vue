@@ -87,7 +87,7 @@ export default{
 </script>
 
 <template>
-  <div class="container" id="about-content">
+  <div class="container about-content">
        <div class="row">
      
         <!-- LOGO -->
