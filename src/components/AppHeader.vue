@@ -8,10 +8,16 @@ export default{
             isSticky: false,
             showDropdown: false,
             isHovered: false,
-            searchTerm: ''
+            searchTerm: '',
+            darkTheme: false,
             
         }
 
+    },
+    computed: {
+        themeIcon() {
+            return this.darkTheme ? ['fas', 'sun'] : ['fas', 'moon']
+        }
     },
     mounted() {
         window.addEventListener('scroll', this.handleScroll);
@@ -58,14 +64,16 @@ export default{
         },
         handleSubmit(){
           console.log('searchTerm', this.searchTerm);
-          //CODICE DA ESEGUIRE//
-
-
+        
+        },
+        toggleTheme() {
+          this.darkTheme = !this.darkTheme;
+          document.body.classList.toggle('dark-theme');
+        
         }
 
-    }
-
   }
+}
 
  
    
@@ -140,6 +148,9 @@ export default{
             <font-awesome-icon :icon="['fas', 'shopping-cart']"></font-awesome-icon>
              
             <font-awesome-icon :icon="['fas', 'user']"></font-awesome-icon>
+
+              <font-awesome-icon :icon="themeIcon" @click="toggleTheme" style="cursor: pointer;" />
+
     
             
           </div>
@@ -490,6 +501,14 @@ export default{
   right: 0;
   bottom : 0;
   transform: translate(40%, 40%);
+}
+.dark-theme {
+  background-color: #333;
+  color: #fff;
+}
+body {
+  font-family: 'Roboto', sans-serif;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
 
